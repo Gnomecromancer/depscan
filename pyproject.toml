@@ -7,7 +7,7 @@ name = "depscan"
 version = "0.1.0"
 description = "Scan requirements.txt, package.json and Cargo.toml for outdated packages and known CVEs"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 keywords = ["dependencies", "security", "vulnerabilities", "cve", "outdated", "pypi", "npm", "cargo"]
 classifiers = [
