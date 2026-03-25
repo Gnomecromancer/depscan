@@ -3,8 +3,8 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "depscan"
-version = "0.1.0"
+name = "pkgscan"
+version = "0.1.1"
 description = "Scan requirements.txt, package.json and Cargo.toml for outdated packages and known CVEs"
 readme = "README.md"
 license = "MIT"
@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-depscan = "depscan.cli:main"
+pkgscan = "depscan.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Gnomecromancer/depscan"

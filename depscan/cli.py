@@ -54,7 +54,7 @@ def _dim(s: str) -> str:
     "--no-color", is_flag=True, default=False,
     help="Disable ANSI color output.",
 )
-@click.version_option(package_name="depscan")
+@click.version_option(package_name="pkgscan")
 def main(
     paths: tuple[Path, ...],
     root: Path | None,

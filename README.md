@@ -1,4 +1,4 @@
-# depscan
+# pkgscan
 
 Scan `requirements.txt`, `package.json`, and `Cargo.toml` for outdated packages and known CVEs — no API keys required.
 
@@ -7,26 +7,26 @@ Uses [OSV](https://osv.dev/) for vulnerability data and PyPI/npm/crates.io for l
 ## Install
 
 ```bash
-pip install depscan
+pip install pkgscan
 ```
 
 ## Usage
 
 ```bash
 # Scan a single file
-depscan requirements.txt
+pkgscan requirements.txt
 
 # Auto-discover all dependency files under a directory
-depscan --dir .
+pkgscan --dir .
 
 # Skip CVE checks (faster)
-depscan requirements.txt --skip-vulns
+pkgscan requirements.txt --skip-vulns
 
 # Only show outdated packages
-depscan --dir . --only-outdated
+pkgscan --dir . --only-outdated
 
 # Only show packages with known CVEs
-depscan --dir . --only-vulns
+pkgscan --dir . --only-vulns
 ```
 
 ## Example output
@@ -56,7 +56,7 @@ Exit code is `0` when all packages are up-to-date and vulnerability-free, `1` ot
 
 ```yaml
 - name: Scan dependencies
-  run: depscan --dir . --skip-vulns
+  run: pkgscan --dir . --skip-vulns
 ```
 
 ## License
