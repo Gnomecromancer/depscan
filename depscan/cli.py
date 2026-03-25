@@ -1,7 +1,9 @@
 """CLI entry point for depscan."""
 from __future__ import annotations
 
+import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import click
@@ -54,6 +56,10 @@ def _dim(s: str) -> str:
     "--no-color", is_flag=True, default=False,
     help="Disable ANSI color output.",
 )
+@click.option(
+    "--json", "output_json", is_flag=True, default=False,
+    help="Output results as JSON (machine-readable).",
+)
 @click.version_option(package_name="pkgscan")
 def main(
     paths: tuple[Path, ...],
@@ -62,6 +68,7 @@ def main(
     only_outdated: bool,
     only_vulns: bool,
     no_color: bool,
+    output_json: bool,
 ) -> None:
     """Scan dependency files for outdated packages and known CVEs.
 
@@ -75,7 +82,7 @@ def main(
       depscan --dir .
       depscan package.json --skip-vulns
     """
-    if no_color:
+    if no_color or output_json:
         global _bold, _red, _yellow, _green, _dim
         _bold = _red = _yellow = _green = _dim = lambda s: s  # noqa: E731
 
@@ -99,6 +106,7 @@ def main(
     total_vulns = 0
     total_deps = 0
     exit_code = 0
+    json_output: list[dict] = []  # populated only when output_json
 
     for dep_file in files:
         try:
@@ -130,6 +138,24 @@ def main(
 
         if file_outdated or file_vulns:
             exit_code = 1
+
+        if output_json:
+            json_output.append({
+                "file": str(dep_file),
+                "packages": [
+                    {
+                        "name": r.dep.name,
+                        "version": r.dep.version,
+                        "latest": r.latest,
+                        "ecosystem": r.dep.ecosystem,
+                        "outdated": r.is_outdated,
+                        "vulns": r.vulns,
+                        "error": r.error,
+                    }
+                    for r in results
+                ],
+            })
+            continue
 
         if not display:
             continue
@@ -173,6 +199,18 @@ def main(
             summary_parts.append(_green("all clear"))
 
         click.echo(f"\n  Summary: {', '.join(summary_parts)}")
+
+    if output_json:
+        click.echo(json.dumps({
+            "scanned_at": datetime.now(timezone.utc).isoformat(),
+            "files": json_output,
+            "summary": {
+                "total_packages": total_deps,
+                "total_outdated": total_outdated,
+                "total_vulnerable": total_vulns,
+            },
+        }, indent=2))
+        sys.exit(exit_code)
 
     # Global summary
     if len(files) > 1:
