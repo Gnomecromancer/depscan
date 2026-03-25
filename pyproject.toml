@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "depscan"
+version = "0.1.0"
+description = "Scan requirements.txt, package.json and Cargo.toml for outdated packages and known CVEs"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = ["dependencies", "security", "vulnerabilities", "cve", "outdated", "pypi", "npm", "cargo"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "click>=8.0.0",
+]
+
+[project.scripts]
+depscan = "depscan.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Gnomecromancer/depscan"
+Repository = "https://github.com/Gnomecromancer/depscan"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["depscan*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
